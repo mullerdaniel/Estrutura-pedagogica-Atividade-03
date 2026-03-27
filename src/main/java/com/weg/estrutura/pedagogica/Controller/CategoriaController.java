@@ -3,23 +3,29 @@ package com.weg.estrutura.pedagogica.Controller;
 import com.weg.estrutura.pedagogica.Dto.Requisicao.CategoriaRequisicaoDto;
 import com.weg.estrutura.pedagogica.Dto.Resposta.CategoriaRespostaDto;
 import com.weg.estrutura.pedagogica.Service.CategoriaService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-    @Autowired
-    private CategoriaService service;
+    private final CategoriaService service;
+
+    public CategoriaController(CategoriaService service) {
+        this.service = service;
+    }
 
     @PostMapping
-    public CategoriaRespostaDto cadastrar(@RequestBody CategoriaRequisicaoDto dto) {
-        return service.cadastrar(dto);
+    public ResponseEntity<CategoriaRespostaDto> cadastrar(@RequestBody CategoriaRequisicaoDto dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(service.cadastrar(dto));
     }
 
     @GetMapping("/{id}")
-    public CategoriaRespostaDto buscarPorId(@PathVariable Long id) {
-        return service.buscarDtoPorId(id);
+    public ResponseEntity<CategoriaRespostaDto> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(service.buscarDtoPorId(id));
     }
 }
